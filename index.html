@@ -1,114 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nikhil Pundir - Portfolio</title>
-    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="loco.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <title>Nikhil Pundir | Full Stack Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- GSAP Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    
-</head>
-<body>
-    <div id="minicircle"></div>
-    <div id="main">
-        <div id="hero">
-            <div id="nav">
-                <a href="./index.html">Portfolio</a>
-            </div>
-            <div id="heading">
-                <div class="bounding">
-                    <h1 class="boundingelem">Web</h1>
-                </div>
-                <div class="blocktext">
-                    <div class="bounding" id="secondh1bound">
-                        <h1 class="boundingelem" id="secondh1">Developer</h1>
-                    </div>
-                    <div class="bounding">
-                        <h5 class="boundingelem">Based in Ghaziabad, India</h5>
-                    </div>
-                </div>
-                
-            </div>
-            <!-- <div id="chotiheadings">
-                <div class="bounding">
-                    <h5 class="boundingelem">available for freelance</h5>
-                </div>
-                <div class="bounding">
-                    <h5 class="boundingelem">mini project form july23'</h5>
-                </div>
-            </div> -->
-            <div id="herofooter">
-                <a href="https://www.cuh.ac.in/">mca 2024 | Central university of haryana <i class="ri-arrow-right-up-line"></i></a>
-                <a href="#">linkedin<i class="ri-arrow-right-up-line"></i></a>
-                <div id="iconset">
-                    <div class="circle"><i class="ri-arrow-down-line"></i></div>
-                    <div class="circle"><i class="ri-arrow-down-line"></i></div>
-                </div>
-            </div>
-        </div>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        <div id="projectHeading">
-            <h5>Projects</h5>
-        </div>
-        <div id="second">
-            <div class="elem">
-                <a href="https://thepods.vercel.app/" target="_blank">
-                
-                <img src="./assets/images/thepods.jpg" alt="">
-                <h1>thepods</h1>
-                
-            </a><h4>2023</h4>
-            </div>
-            <div class="elem">
-                <a href="https://monkrangers.vercel.app/" target="_blank">
-                <img src="./assets/images/monkrangers.jpg" alt="">
-                <h1>monkrangers</h1>
-                
-            </a>
-            <h4>2023</h4>
-            </div>
-            <div class="elem elemlast">
-                <a href="https://echio.in/home.html" target="_blank">
-                <img src="./assets/images/echio.jpg" alt="">
-                <h1>echio</h1>
-                
-            </a>
-            <h4>2023</h4>
-            </div>
-        </div>
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        saffron: '#FF9933',
+                        rani: '#E91E63',
+                        indigo: '#1A237E',
+                        teal: '#009688',
+                        cream: '#FFFDD0',
+                        marigold: '#FFC107',
+                        charcoal: '#121212',
+                    },
+                }
+            }
+        }
+    </script>
     
-        <div id="about">
-                <div id="text">
-                    <h5>(about me)</h5>
-                    <p>Welcome to my portfolio! I'm a seasoned web developer skilled in the MERN stack, Java, SQL, Git, and more. From designing stunning websites to developing robust applications, I excel at bringing ideas to life. When I'm not coding, you can find me on the basketball court or exploring new music. With a problem-solving mindset and a passion for elegant solutions, I aim to create software that delights users. Let's collaborate and bring your ideas to life!</p>
-                    <a href="https://www.linkedin.com/in/nikhil-pundir/">let's talk</a>
-                </div>
-                <div id="image">
-                    <img src="./assets/images/nikhil.jpg" id="profilepic" alt="">
-                </div>
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-charcoal antialiased">
+
+    <!-- Custom Cursor (Desktop Only) -->
+    <div id="cursor" class="cursor-dot hidden md:block"></div>
+
+    <!-- Fixed Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 p-4 md:p-6 flex justify-between items-center mix-blend-difference text-white pointer-events-none bg-charcoal/10 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none">
+        <a href="#" class="text-xl md:text-2xl font-display font-bold tracking-tighter uppercase pointer-events-auto" onclick="scrollToSection(0)">
+            Nikhil Pundir
+        </a>
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex gap-8 font-sans font-bold uppercase tracking-wider text-sm pointer-events-auto">
+            <button onclick="scrollToSection(0)" class="hover:underline decoration-2 underline-offset-4">Home</button>
+            <button onclick="scrollToSection(1)" class="hover:underline decoration-2 underline-offset-4">About</button>
+            <button onclick="scrollToSection(2)" class="hover:underline decoration-2 underline-offset-4">Skills</button>
+            <button onclick="scrollToSection(3)" class="hover:underline decoration-2 underline-offset-4">Experience</button>
+            <button onclick="scrollToSection(4)" class="hover:underline decoration-2 underline-offset-4">Contact</button>
         </div>
-        
-        <div id="footer">
-            <div id="footerleft">
-                <!-- <h5 id="footerYear"></h5> -->
-                <h5 id="datetime"></h5>
+        <!-- Mobile Menu Icon (Simple scroll to bottom for contact) -->
+        <div class="md:hidden pointer-events-auto">
+            <button onclick="scrollToSection(4)" class="text-sm font-bold uppercase border-2 border-white px-3 py-1">Contact</button>
+        </div>
+        <!-- Progress Bar -->
+        <div class="fixed bottom-0 left-0 h-2 bg-white transition-all duration-300 z-50" id="progressBar" style="width: 0%"></div>
+    </nav>
+
+    <!-- Scroll Helper Buttons (Desktop Only) -->
+    <div class="hidden md:flex fixed bottom-8 right-8 z-40 gap-4">
+        <button onclick="scrollPrev()" class="w-14 h-14 bg-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-marigold transition-colors active:translate-y-1 active:shadow-none">
+            <i class="fa-solid fa-arrow-left text-xl"></i>
+        </button>
+        <button onclick="scrollNext()" class="w-14 h-14 bg-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-marigold transition-colors active:translate-y-1 active:shadow-none">
+            <i class="fa-solid fa-arrow-right text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div id="project-modal" class="fixed inset-0 z-[100] bg-cream flex flex-col closed overflow-y-auto">
+        <div class="sticky top-0 w-full p-6 flex justify-end bg-cream z-50 border-b-4 border-black">
+            <button onclick="closeProject()" class="w-12 h-12 bg-rani text-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-black transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+        </div>
+        <div class="container mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
+            <div class="w-full md:w-1/2">
+                <div class="relative">
+                    <div id="modal-image-container" class="border-4 border-black solid-shadow overflow-hidden h-64 md:h-96 bg-gray-200 flex items-center justify-center">
+                        <img id="modal-image" src="" alt="Project Image" class="w-full h-full object-cover hidden">
+                        <i id="modal-image-placeholder" class="fa-solid fa-laptop-code text-6xl text-gray-400"></i>
+                    </div>
+                    <!-- Image Navigation Arrows -->
+                    <button id="prev-image" class="hidden absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 border-2 border-black solid-shadow items-center justify-center hover:bg-marigold transition-colors z-10">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button id="next-image" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 border-2 border-black solid-shadow items-center justify-center hover:bg-marigold transition-colors z-10">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <!-- Image Indicators -->
+                    <div id="image-indicators" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
+                </div>
+                <!-- Thumbnail Gallery -->
+                <div id="thumbnail-gallery" class="mt-4 grid grid-cols-4 gap-2 hidden"></div>
+                <div class="mt-8 flex gap-4">
+                    <button id="live-demo-btn" class="flex-1 py-4 bg-black text-white font-display font-bold uppercase border-4 border-black hover:bg-white hover:text-black transition-colors">Live Demo</button>
+                    <button id="github-btn" class="flex-1 py-4 bg-white text-black font-display font-bold uppercase border-4 border-black solid-shadow hover:bg-teal hover:text-white transition-colors">GitHub</button>
+                </div>
             </div>
-            <div id="footerright">
-                <a href="https://www.linkedin.com/in/nikhil-pundir/">linkedin</a>
-                <a href="https://github.com/nikhilpundir">github</a>
-                <a href="https://www.instagram.com/_pundirnikhil/">instagram</a>
-                <a href="https://twitter.com/nikhil__pundir">twitter</a>
+            <div class="w-full md:w-1/2">
+                <span id="modal-tag" class="bg-indigo text-white px-4 py-1 font-sans font-bold text-sm uppercase inline-block solid-shadow mb-4">Tag</span>
+                <h2 id="modal-title" class="text-4xl md:text-7xl font-display font-black text-black mb-6 leading-[0.9]">PROJECT TITLE</h2>
+                <p id="modal-desc" class="text-lg md:text-xl font-sans font-medium text-gray-800 mb-8 leading-relaxed border-l-4 border-marigold pl-6">Description.</p>
+                <h3 class="text-2xl font-display font-bold mb-4">Technologies Used</h3>
+                <div id="modal-tech" class="flex flex-wrap gap-3 mb-12"></div>
+                <div class="bg-white p-8 border-4 border-black solid-shadow">
+                    <h3 class="text-xl font-display font-bold mb-2">Key Features</h3>
+                    <ul class="list-disc list-inside font-sans space-y-2">
+                        <li>Scalable Architecture</li>
+                        <li>Secure Authentication</li>
+                        <li>High Performance API</li>
+                        <li>Responsive Design</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" integrity="sha512-cOH8ndwGgPo+K7pTvMrqYbmI8u8k6Sho3js0gOqVWTmQMlLIi6TbqGWRTpf1ga8ci9H3iPsvDLr4X7xwhC/+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.min.js"></script>
-    <script src="./script.js"></script>
+
+    <!-- Main Container -->
+    <main id="scroll-container">
+        
+        <!-- SECTION 1: HOME -->
+        <section id="home" class="bg-saffron flex items-center justify-center relative group pt-20 md:pt-0">
+            <!-- Decorative Interactive Shapes -->
+            <div onclick="explode(event)" class="absolute top-20 left-10 md:left-20 w-20 h-20 md:w-32 md:h-32 bg-indigo rounded-full animate-[bounce_3s_infinite] cursor-pointer hover:scale-110 transition-transform border-4 border-black"></div>
+            <div onclick="explode(event)" class="absolute bottom-20 right-10 md:right-20 w-32 h-32 md:w-48 md:h-48 bg-marigold rotate-45 animate-[spin_10s_linear_infinite] cursor-pointer hover:scale-110 transition-transform border-4 border-black"></div>
+            
+            <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+                <div class="gsap-reveal-home text-center md:text-left">
+                    <h1 class="text-3xl md:text-7xl font-display font-black text-white leading-[0.9] mb-6">
+                        FULL STACK<br>
+                        <span class="text-indigo">DEV</span>ELOPER
+                    </h1>
+                    <p class="text-lg md:text-xl font-sans font-medium text-indigo/80 max-w-md mx-auto md:mx-0 mb-8 bg-white/20 p-4 border-l-4 border-indigo backdrop-blur-none">
+                        Specializing in Java, Spring Boot, and MERN stack. Architecting scalable enterprise solutions.
+                    </p>
+                    <button onclick="scrollToSection(3)" class="px-8 py-4 bg-indigo text-white font-bold font-sans uppercase tracking-wider solid-shadow-white hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all border-2 border-indigo">
+                        See My Work
+                    </button>
+                </div>
+                <!-- Hero Image -->
+                <div class="relative h-[300px] md:h-[500px] w-full gsap-reveal-home-img mt-8 md:mt-0">
+                    <div class="absolute inset-0 bg-rani border-4 border-black solid-shadow transform rotate-3 z-10"></div>
+                    <div class="absolute inset-0 w-full h-full border-4 border-black z-20 overflow-hidden">
+                        <img src="assets/images/mypic.png" alt="Nikhil Pundir" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ABOUT -->
+        <section id="about" class="bg-cream flex items-center relative pt-20 md:pt-0">
+            <div class="absolute left-0 h-full w-full md:w-1/3 bg-teal/10 hidden md:block skew-x-12 transform -translate-x-20"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex flex-col md:flex-row gap-16 items-center">
+                    <div class="w-full md:w-1/2 relative gsap-reveal-about-left">
+                        <div class="relative z-10 p-6 md:p-10 bg-white border-4 border-black solid-shadow">
+                            <h2 class="text-2xl md:text-6xl font-display font-black text-black mb-6">WHO I AM</h2>
+                            <p class="text-base md:text-lg font-sans text-gray-800 mb-6 leading-relaxed font-medium">
+                                I am <span class="bg-marigold px-1">Nikhil Pundir</span>. A highly adaptable Full Stack Developer with over 1.5 years of experience. I master new frameworks rapidly and contribute directly to successful backend product deployment.
+                            </p>
+                            <div class="grid grid-cols-2 gap-4 mt-8">
+                                <div class="p-4 bg-teal text-white border-2 border-black text-center">
+                                    <span class="block text-3xl md:text-4xl font-display font-bold">1.5+</span>
+                                    <span class="text-xs uppercase tracking-widest">Years Exp</span>
+                                </div>
+                                <div class="p-4 bg-rani text-white border-2 border-black text-center">
+                                    <span class="block text-3xl md:text-4xl font-display font-bold">MCA</span>
+                                    <span class="text-xs uppercase tracking-widest">Qualified</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 -right-4 w-full h-full border-4 border-black z-0 bg-transparent"></div>
+                    </div>
+                    <div class="w-full md:w-1/2 gsap-reveal-about-right">
+                        <!-- Hidden "ABOUT" text on mobile to save space -->
+                        <h3 class="hidden md:block text-8xl font-display font-black text-transparent text-stroke outline-text opacity-20 absolute top-0 right-0 select-none">ABOUT</h3>
+                        <ul class="space-y-6 font-sans text-xl md:text-2xl font-bold text-black">
+                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
+                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-rani transition-colors shrink-0">1</span>
+                                <span>Backend Architect</span>
+                            </li>
+                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
+                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-saffron transition-colors shrink-0">2</span>
+                                <span>Java & Spring Boot</span>
+                            </li>
+                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
+                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-teal transition-colors shrink-0">3</span>
+                                <span>MERN Stack Expert</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS -->
+        <section id="skills" class="bg-rani flex flex-col justify-center relative overflow-hidden pt-20 md:pt-0">
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 2px, transparent 2px); background-size: 30px 30px;"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <h2 class="text-3xl md:text-9xl font-display font-black text-white mb-12 text-center mix-blend-overlay opacity-50 md:absolute md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:w-full pointer-events-none">
+                    TOOLKIT
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill">
+                        <div class="w-16 h-16 bg-saffron border-2 border-black mb-6 flex items-center justify-center text-3xl">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4">Backend</h3>
+                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
+                            <span class="bg-gray-200 px-2 py-1">Java</span>
+                            <span class="bg-gray-200 px-2 py-1">Spring Boot</span>
+                            <span class="bg-gray-200 px-2 py-1">Node.js</span>
+                            <span class="bg-gray-200 px-2 py-1">PostgreSQL</span>
+                            <span class="bg-gray-200 px-2 py-1">MongoDB</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill delay-100">
+                        <div class="w-16 h-16 bg-teal border-2 border-black mb-6 flex items-center justify-center text-3xl">
+                            <i class="fa-brands fa-react"></i>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4">Frontend</h3>
+                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
+                            <span class="bg-gray-200 px-2 py-1">React.js</span>
+                            <span class="bg-gray-200 px-2 py-1">Next.js</span>
+                            <span class="bg-gray-200 px-2 py-1">Electron.js</span>
+                            <span class="bg-gray-200 px-2 py-1">Tailwind</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill delay-200">
+                        <div class="w-16 h-16 bg-indigo text-white border-2 border-black mb-6 flex items-center justify-center text-3xl">
+                            <i class="fa-solid fa-wrench"></i>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold mb-4">Tools & Mobile</h3>
+                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
+                            <span class="bg-gray-200 px-2 py-1">Flutter</span>
+                            <span class="bg-gray-200 px-2 py-1">Git/GitHub</span>
+                            <span class="bg-gray-200 px-2 py-1">Postman</span>
+                            <span class="bg-gray-200 px-2 py-1">SPI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: EXPERIENCE/WORK -->
+        <section id="work" class="bg-teal flex items-center relative pt-20 md:pt-0 pb-20 md:pb-0">
+            <div class="container mx-auto px-6 flex flex-col justify-center min-h-full">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b-4 border-black pb-4">
+                    <h2 class="text-3xl md:text-7xl font-display font-black text-white text-stroke-black">EXPERIENCE</h2>
+                    <span class="font-sans font-bold text-white text-xl mt-2 md:mt-0">Recent Projects</span>
+                </div>
+                
+                <!-- Projects Container: Stacked on Mobile, Grid on Desktop -->
+                <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1 -->
+                    <div onclick="openProject('Brand Portal & App', 'Developed a scalable, full-stack brand portal and mobile app for influencer marketing. Features campaign management and profile discovery.', 'Spring Boot, Next.js, PostgreSQL, Flutter', 'assets/images/echio_brand.png', 'Echiofy')" 
+                         class="w-full group relative cursor-pointer gsap-reveal-project">
+                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
+                             <div class="text-white text-center p-6">
+                                <h3 class="text-3xl font-display font-bold mb-2">Influencer Portal</h3>
+                                <p class="font-sans text-sm opacity-80">Spring Boot + Next.js</p>
+                            </div>
+                            <div class="absolute inset-0 bg-indigo/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
+                                <h3 class="text-3xl font-display font-bold text-white mb-2">Brand Portal</h3>
+                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div onclick="openProject('Restaurant POS', 'Engineered a comprehensive Restaurant POS system integrating cash and SPI payments for streamlined operations.', 'MERN Stack, SPI Payments', 'assets/images/kodeklan_greenfarm_pos.jpeg', 'Kode Klan')" 
+                         class="w-full group relative cursor-pointer gsap-reveal-project">
+                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
+                             <div class="text-white text-center p-6">
+                                <h3 class="text-3xl font-display font-bold mb-2">Restaurant POS</h3>
+                                <p class="font-sans text-sm opacity-80">MERN Stack</p>
+                            </div>
+                            <div class="absolute inset-0 bg-rani/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
+                                <h3 class="text-3xl font-display font-bold text-white mb-2">Restaurant POS</h3>
+                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div onclick="openProject('Driver App', 'Secure, real-time Driver Desktop Application using Electron.js and WebSockets for dynamic POS communication and thermal printing.', 'Electron.js, WebSockets, Node.js', '', 'Kode Klan')" 
+                         class="w-full group relative cursor-pointer gsap-reveal-project">
+                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
+                             <div class="text-white text-center p-6">
+                                <h3 class="text-3xl font-display font-bold mb-2">Driver Desktop App</h3>
+                                <p class="font-sans text-sm opacity-80">Electron.js + WebSockets</p>
+                            </div>
+                            <div class="absolute inset-0 bg-saffron/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
+                                <h3 class="text-3xl font-display font-bold text-white mb-2">Driver App</h3>
+                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CONTACT -->
+        <section id="contact" class="bg-indigo flex items-center relative pt-20 md:pt-0">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row gap-12 items-center justify-center h-full">
+                <div class="w-full md:w-1/2 text-white text-center md:text-left gsap-reveal-contact">
+                    <h2 class="text-4xl md:text-9xl font-display font-black mb-6 leading-none">SAY<br><span class="text-marigold">HELLO.</span></h2>
+                    <p class="text-lg md:text-xl font-sans mb-8 max-w-lg mx-auto md:mx-0">Ready to architect scalable backend solutions? Let's connect.</p>
+                    <a href="mailto:nikhilp190902@gmail.com" class="inline-block text-xl md:text-5xl font-display font-bold hover:text-saffron transition-colors border-b-4 border-white hover:border-saffron pb-2 break-all md:break-normal">
+                        nikhilp190902@gmail.com
+                    </a>
+                    <div class="mt-12 flex gap-6 justify-center md:justify-start">
+                        <a href="https://github.com/nikhilpundir" target="_blank" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center text-2xl border-4 border-transparent hover:border-marigold hover:scale-110 transition-all"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://linkedin.com/in/nikhil-pundir" target="_blank" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center text-2xl border-4 border-transparent hover:border-rani hover:scale-110 transition-all"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 w-full bg-black text-white p-4 text-center font-sans font-bold uppercase tracking-widest text-xs">
+                © 2025 Nikhil Pundir • New Delhi, India
+            </div>
+        </section>
+    </main>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>

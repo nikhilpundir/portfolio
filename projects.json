@@ -1,0 +1,69 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "Brand Portal  & App",
+      "company": "Echiofy",
+      "tag": "Full Stack",
+      "shortDescription": "Spring Boot + Next.js",
+      "fullDescription": "Developed a scalable, full-stack brand portal and mobile app for influencer marketing. Features campaign management and profile discovery.",
+      "technologies": ["Spring Boot", "Next.js", "PostgreSQL", "Flutter"],
+      "images": [
+        "assets/images/echio_brand.png",
+        "assets/images/echio.jpg"
+      ],
+      "liveUrl": "",
+      "githubUrl": "",
+      "features": [
+        "Campaign Management System",
+        "Influencer Profile Discovery",
+        "Real-time Analytics Dashboard",
+        "Mobile App Integration"
+      ],
+      "color": "indigo"
+    },
+    {
+      "id": 2,
+      "title": "Restaurant POS",
+      "company": "Kode Klan",
+      "tag": "MERN Stack",
+      "shortDescription": "MERN Stack",
+      "fullDescription": "Engineered a comprehensive Restaurant POS system integrating cash and SPI payments for streamlined operations.",
+      "technologies": ["MongoDB", "Express.js", "React.js", "Node.js", "SPI Payments"],
+      "images": [
+        "assets/images/kodeklan_greenfarm_pos.jpeg",
+        "assets/images/thepods.jpg"
+      ],
+      "liveUrl": "",
+      "githubUrl": "",
+      "features": [
+        "Integrated Payment Processing",
+        "Order Management System",
+        "Real-time Kitchen Display",
+        "Inventory Tracking"
+      ],
+      "color": "rani"
+    },
+    {
+      "id": 3,
+      "title": "Driver Desktop App",
+      "company": "Kode Klan",
+      "tag": "Desktop App",
+      "shortDescription": "Electron.js + WebSockets",
+      "fullDescription": "Secure, real-time Driver Desktop Application using Electron.js and WebSockets for dynamic POS communication and thermal printing.",
+      "technologies": ["Electron.js", "WebSockets", "Node.js", "Thermal Printing"],
+      "images": [
+        "assets/images/monkrangers.jpg"
+      ],
+      "liveUrl": "",
+      "githubUrl": "",
+      "features": [
+        "Real-time Communication",
+        "Thermal Receipt Printing",
+        "Secure Authentication",
+        "Cross-platform Support"
+      ],
+      "color": "saffron"
+    }
+  ]
+}
