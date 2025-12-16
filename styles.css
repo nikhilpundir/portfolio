@@ -79,3 +79,47 @@ section {
     pointer-events: none;
     z-index: 9998;
 }
+
+/* Projects Scrollable Container */
+.projects-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+    /* Show only 3 projects on desktop (3 rows of ~400px + gaps) */
+    max-height: calc(100vh - 250px); /* Account for header and padding */
+}
+
+/* Mobile: show 2 projects in view */
+@media (max-width: 767px) {
+    .projects-scroll {
+        max-height: calc(100vh - 200px);
+    }
+}
+
+.projects-scroll::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+}
+
+.projects-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.projects-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.projects-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Ensure projects section doesn't interfere with horizontal scroll */
+#work {
+    overflow: visible !important;
+}
+
+#work .projects-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -76,6 +76,13 @@ const scrollContainer = document.getElementById('scroll-container');
 
 // Only hijack scroll wheel on DESKTOP (screen width > 768px)
 scrollContainer.addEventListener("wheel", (evt) => {
+    // Check if we're scrolling inside the projects container
+    const projectsScroll = evt.target.closest('.projects-scroll');
+    if (projectsScroll) {
+        // Allow natural vertical scrolling in projects section
+        return;
+    }
+    
     if(window.innerWidth > 768) {
         evt.preventDefault();
         scrollContainer.scrollLeft += evt.deltaY;

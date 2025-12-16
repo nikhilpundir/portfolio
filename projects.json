@@ -64,6 +64,26 @@
         "Cross-platform Support"
       ],
       "color": "saffron"
+    },
+    {
+      "id": 4,
+      "title": "E-Commerce Platform",
+      "company": "Personal Project",
+      "tag": "Full Stack",
+      "shortDescription": "MERN + Payment Gateway",
+      "fullDescription": "Built a complete e-commerce platform with product management, shopping cart, order processing, and integrated payment gateway for seamless transactions.",
+      "technologies": ["React.js", "Node.js", "Express.js", "MongoDB", "Stripe", "Redux"],
+      "images": [],
+      "liveUrl": "",
+      "githubUrl": "",
+      "features": [
+        "Product Catalog Management",
+        "Shopping Cart & Checkout",
+        "Payment Gateway Integration",
+        "Order Tracking System",
+        "Admin Dashboard"
+      ],
+      "color": "teal"
     }
   ]
 }
