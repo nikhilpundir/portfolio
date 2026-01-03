@@ -8,10 +8,7 @@
       "shortDescription": "Spring Boot + Next.js",
       "fullDescription": "Developed a scalable, full-stack brand portal and mobile app for influencer marketing. Features campaign management and profile discovery.",
       "technologies": ["Spring Boot", "Next.js", "PostgreSQL", "Flutter"],
-      "images": [
-        "assets/images/echio_brand.png",
-        "assets/images/echio.jpg"
-      ],
+      "images": ["assets/images/echio_brand.png", "assets/images/echio.jpg"],
       "liveUrl": "",
       "githubUrl": "",
       "features": [
@@ -29,7 +26,13 @@
       "tag": "MERN Stack",
       "shortDescription": "MERN Stack",
       "fullDescription": "Engineered a comprehensive Restaurant POS system integrating cash and SPI payments for streamlined operations.",
-      "technologies": ["MongoDB", "Express.js", "React.js", "Node.js", "SPI Payments"],
+      "technologies": [
+        "MongoDB",
+        "Express.js",
+        "React.js",
+        "Node.js",
+        "SPI Payments"
+      ],
       "images": [
         "assets/images/kodeklan_greenfarm_pos.jpeg",
         "assets/images/thepods.jpg"
@@ -51,10 +54,13 @@
       "tag": "Desktop App",
       "shortDescription": "Electron.js + WebSockets",
       "fullDescription": "Secure, real-time Driver Desktop Application using Electron.js and WebSockets for dynamic POS communication and thermal printing.",
-      "technologies": ["Electron.js", "WebSockets", "Node.js", "Thermal Printing"],
-      "images": [
-        "assets/images/monkrangers.jpg"
+      "technologies": [
+        "Electron.js",
+        "WebSockets",
+        "Node.js",
+        "Thermal Printing"
       ],
+      "images": ["assets/images/monkrangers.jpg"],
       "liveUrl": "",
       "githubUrl": "",
       "features": [
@@ -73,7 +79,11 @@
       "shortDescription": "MERN + Payment Gateway",
       "fullDescription": "Built a full-stack e-commerce solution for Green Farm Halal Meat NSW, featuring product catalog browsing, online ordering, store selection, and an optimized UI for showcasing fresh halal meat products.",
       "technologies": ["React.js", "Node.js", "Express.js", "MongoDB", "Redux"],
-      "images": ["assets/images/greenfarm_ecomm.png","assets/images/greenfarm_ecomm_1.png","assets/images/greenfarm_ecomm_2.png"],
+      "images": [
+        "assets/images/greenfarm_ecomm.png",
+        "assets/images/greenfarm_ecomm_1.png",
+        "assets/images/greenfarm_ecomm_2.png"
+      ],
       "liveUrl": "",
       "githubUrl": "",
       "features": [
@@ -84,6 +94,38 @@
         "Admin Dashboard"
       ],
       "color": "teal"
+    },
+    {
+      "id": 5,
+      "title": "Habitish - Modern Habit Tracker",
+      "company": "Personal Project",
+      "tag": "Full Stack",
+      "shortDescription": "Next.js 16 + Tailwind CSS 4",
+      "fullDescription": "Built a modern, responsive habit tracking application with daily habit management, streak tracking, visual insights dashboard, and beautiful UI featuring glass morphism effects and smooth animations. All data stored locally with full TypeScript support.",
+      "technologies": [
+        "Next.js 16",
+        "TypeScript",
+        "Tailwind CSS 4",
+        "Recharts",
+        "date-fns"
+      ],
+      "images": [
+        "assets/images/habitish.png",
+        "assets/images/habitish_1.png",
+        "assets/images/habitish_2.png"
+      ],
+      "liveUrl": "https://habitish.vercel.app/",
+      "githubUrl": "https://github.com/nikhilpundir/habitish",
+      "features": [
+        "Daily Habit Tracking & Completion",
+        "Streak Tracking System",
+        "Visual Insights Dashboard with Charts",
+        "Habit Management (Add/Delete)",
+        "Local Storage Persistence",
+        "Responsive Design with Dark Mode",
+        "Daily Motivational Quotes"
+      ],
+      "color": "indigo"
     }
   ]
 }
