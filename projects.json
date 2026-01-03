@@ -67,13 +67,13 @@
     },
     {
       "id": 4,
-      "title": "E-Commerce Platform",
-      "company": "Personal Project",
+      "title": "Green Farm Halal Meat E-commerce Platform",
+      "company": "KodeKlan Pvt. Ltd.",
       "tag": "Full Stack",
       "shortDescription": "MERN + Payment Gateway",
-      "fullDescription": "Built a complete e-commerce platform with product management, shopping cart, order processing, and integrated payment gateway for seamless transactions.",
-      "technologies": ["React.js", "Node.js", "Express.js", "MongoDB", "Stripe", "Redux"],
-      "images": [],
+      "fullDescription": "Built a full-stack e-commerce solution for Green Farm Halal Meat NSW, featuring product catalog browsing, online ordering, store selection, and an optimized UI for showcasing fresh halal meat products.",
+      "technologies": ["React.js", "Node.js", "Express.js", "MongoDB", "Redux"],
+      "images": ["assets/images/greenfarm_ecomm.png","assets/images/greenfarm_ecomm_1.png","assets/images/greenfarm_ecomm_2.png"],
       "liveUrl": "",
       "githubUrl": "",
       "features": [

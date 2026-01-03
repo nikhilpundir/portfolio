@@ -213,7 +213,7 @@ function openProjectById(id) {
         liveDemoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
     } else {
         liveDemoBtn.onclick = null;
-        liveDemoBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        liveDemoBtn.classList.add('opacity-50', 'cursor-not-allowed','invisible');
     }
     
     if (project.githubUrl) {
@@ -221,7 +221,7 @@ function openProjectById(id) {
         githubBtn.classList.remove('opacity-50', 'cursor-not-allowed');
     } else {
         githubBtn.onclick = null;
-        githubBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        githubBtn.classList.add('opacity-50', 'cursor-not-allowed','invisible');
     }
 
     modal.classList.remove('hidden', 'closed');
