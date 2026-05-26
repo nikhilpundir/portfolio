@@ -1,349 +1,329 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nikhil Pundir | Full Stack Developer</title>
+    <title>Nikhil Pundir | Full Stack Engineer</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <!-- GSAP Core -->
+    <!-- GSAP Core & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- GSAP ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
-    <!-- Fonts -->
+    <!-- Google Fonts: Playfair Display (Serif) & Plus Jakarta Sans (Sans-serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind Config -->
+    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        display: ['Syne', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
                     },
                     colors: {
-                        saffron: '#FF9933',
-                        rani: '#E91E63',
-                        indigo: '#1A237E',
-                        teal: '#009688',
-                        cream: '#FFFDD0',
-                        marigold: '#FFC107',
-                        charcoal: '#121212',
-                    },
+                        accent: 'var(--accent-color)',
+                        accentHover: 'var(--accent-hover)',
+                    }
                 }
             }
         }
     </script>
     
-    <!-- External Stylesheet -->
+    <!-- Custom Style Sheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-charcoal antialiased">
+<body class="antialiased relative select-none">
 
-    <!-- Custom Cursor (Desktop Only) -->
-    <div id="cursor" class="cursor-dot hidden md:block"></div>
-
-    <!-- Fixed Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 p-4 md:p-6 flex justify-between items-center mix-blend-difference text-white pointer-events-none bg-charcoal/10 backdrop-blur-sm md:bg-transparent md:backdrop-blur-none">
-        <a href="#" class="text-xl md:text-2xl font-display font-bold tracking-tighter uppercase pointer-events-auto" onclick="scrollToSection(0)">
-            Nikhil Pundir
-        </a>
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex gap-8 font-sans font-bold uppercase tracking-wider text-sm pointer-events-auto">
-            <button onclick="scrollToSection(0)" class="hover:underline decoration-2 underline-offset-4">Home</button>
-            <button onclick="scrollToSection(1)" class="hover:underline decoration-2 underline-offset-4">About</button>
-            <button onclick="scrollToSection(2)" class="hover:underline decoration-2 underline-offset-4">Skills</button>
-            <button onclick="scrollToSection(3)" class="hover:underline decoration-2 underline-offset-4">Experience</button>
-            <button onclick="scrollToSection(4)" class="hover:underline decoration-2 underline-offset-4">Contact</button>
-        </div>
-        <!-- Mobile Menu Icon (Simple scroll to bottom for contact) -->
-        <div class="md:hidden pointer-events-auto">
-            <button onclick="scrollToSection(4)" class="text-sm font-bold uppercase border-2 border-white px-3 py-1">Contact</button>
-        </div>
-        <!-- Progress Bar -->
-        <div class="fixed bottom-0 left-0 h-2 bg-white transition-all duration-300 z-50" id="progressBar" style="width: 0%"></div>
-    </nav>
-
-    <!-- Scroll Helper Buttons (Desktop Only) -->
-    <div class="hidden md:flex fixed bottom-8 right-8 z-40 gap-4">
-        <button onclick="scrollPrev()" class="w-14 h-14 bg-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-marigold transition-colors active:translate-y-1 active:shadow-none">
-            <i class="fa-solid fa-arrow-left text-xl"></i>
-        </button>
-        <button onclick="scrollNext()" class="w-14 h-14 bg-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-marigold transition-colors active:translate-y-1 active:shadow-none">
-            <i class="fa-solid fa-arrow-right text-xl"></i>
-        </button>
+    <!-- Dynamic Background & Sunbeam -->
+    <div class="gradient-bg">
+        <div id="sunbeam" class="sunbeam"></div>
     </div>
 
-    <!-- Project Detail Modal -->
-    <div id="project-modal" class="fixed inset-0 z-[100] bg-cream flex flex-col closed overflow-y-auto">
-        <div class="sticky top-0 w-full p-6 flex justify-end bg-cream z-50 border-b-4 border-black">
-            <button onclick="closeProject()" class="w-12 h-12 bg-rani text-white border-4 border-black solid-shadow flex items-center justify-center hover:bg-black transition-colors">
-                <i class="fa-solid fa-xmark text-2xl"></i>
+    <!-- Viscous Canvas Overlay -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Floating Capsule Pill (Dynamic Island style) -->
+    <nav id="nav-capsule" class="nav-capsule">
+        <div class="nav-trigger" id="nav-trigger">
+            <i class="fa-solid fa-compass text-base"></i>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <button onclick="scrollToSection('home')" class="nav-link active">Home</button>
+            <button onclick="scrollToSection('about')" class="nav-link">About</button>
+            <button onclick="scrollToSection('skills')" class="nav-link">Toolkit</button>
+            <button onclick="scrollToSection('work')" class="nav-link">Works</button>
+            <button onclick="scrollToSection('contact')" class="nav-link">Contact</button>
+            <span class="w-[1.5px] h-3 bg-gray-200 dark:bg-neutral-800"></span>
+            
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+            
+            <!-- Reduced Motion Accessibility Toggle -->
+            <button id="motion-toggle" class="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="Toggle Motion Sensitivity">
+                <i class="fa-solid fa-eye text-xs"></i>
             </button>
         </div>
-        <div class="container mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
-            <div class="w-full md:w-1/2">
-                <div class="relative">
-                    <div id="modal-image-container" class="border-4 border-black solid-shadow overflow-hidden h-64 md:h-96 bg-gray-200 flex items-center justify-center">
-                        <img id="modal-image" src="" alt="Project Image" class="w-full h-full object-cover hidden">
-                        <i id="modal-image-placeholder" class="fa-solid fa-laptop-code text-6xl text-gray-400"></i>
-                    </div>
-                    <!-- Image Navigation Arrows -->
-                    <button id="prev-image" class="hidden absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 border-2 border-black solid-shadow items-center justify-center hover:bg-marigold transition-colors z-10">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <button id="next-image" class="hidden absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 border-2 border-black solid-shadow items-center justify-center hover:bg-marigold transition-colors z-10">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-                    <!-- Image Indicators -->
-                    <div id="image-indicators" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
-                </div>
-                <!-- Thumbnail Gallery -->
-                <div id="thumbnail-gallery" class="mt-4 grid grid-cols-4 gap-2 hidden"></div>
-                <div class="mt-8 flex gap-4">
-                    <button id="live-demo-btn" class="flex-1 py-4 bg-black text-white font-display font-bold uppercase border-4 border-black hover:bg-white hover:text-black transition-colors">Live Demo</button>
-                    <button id="github-btn" class="flex-1 py-4 bg-white text-black font-display font-bold uppercase border-4 border-black solid-shadow hover:bg-teal hover:text-white transition-colors">GitHub</button>
-                </div>
+    </nav>
+
+    <!-- Floating Bottom Capsule Pill (Ergonomic Mobile Tab Bar) -->
+    <nav id="mobile-nav-capsule" class="mobile-nav-capsule">
+        <button onclick="scrollToSection('home')" class="mobile-nav-btn active" title="Home">
+            <i class="fa-solid fa-house"></i>
+        </button>
+        <button onclick="scrollToSection('about')" class="mobile-nav-btn" title="About">
+            <i class="fa-solid fa-user"></i>
+        </button>
+        <button onclick="scrollToSection('skills')" class="mobile-nav-btn" title="Toolkit">
+            <i class="fa-solid fa-briefcase"></i>
+        </button>
+        <button onclick="scrollToSection('work')" class="mobile-nav-btn" title="Works">
+            <i class="fa-solid fa-folder"></i>
+        </button>
+        <button onclick="scrollToSection('contact')" class="mobile-nav-btn" title="Contact">
+            <i class="fa-solid fa-envelope"></i>
+        </button>
+    </nav>
+
+    <!-- Project Floating Hover Image Panel -->
+    <div id="project-hover-panel">
+        <img id="project-hover-img" src="" alt="Preview">
+    </div>
+
+    <!-- Project Case Study Detail Modal -->
+    <div id="project-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 closed opacity-0 invisible backdrop-blur-md bg-black/10 dark:bg-black/40 transition-all duration-300">
+        <div class="relative w-full max-w-5xl max-h-[85vh] hairline-card overflow-hidden flex flex-col scale-95 shadow-2xl bg-white/90 dark:bg-black/85">
+            <div class="absolute top-4 right-4 z-50">
+                <button onclick="closeProject()" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-gray-800 dark:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-            <div class="w-full md:w-1/2">
-                <span id="modal-tag" class="bg-indigo text-white px-4 py-1 font-sans font-bold text-sm uppercase inline-block solid-shadow mb-4">Tag</span>
-                <h2 id="modal-title" class="text-4xl md:text-7xl font-display font-black text-black mb-6 leading-[0.9]">PROJECT TITLE</h2>
-                <p id="modal-desc" class="text-lg md:text-xl font-sans font-medium text-gray-800 mb-8 leading-relaxed border-l-4 border-marigold pl-6">Description.</p>
-                <h3 class="text-2xl font-display font-bold mb-4">Technologies Used</h3>
-                <div id="modal-tech" class="flex flex-wrap gap-3 mb-12"></div>
-                <div class="bg-white p-8 border-4 border-black solid-shadow">
-                    <h3 class="text-xl font-display font-bold mb-2">Key Features</h3>
-                    <ul class="list-disc list-inside font-sans space-y-2">
-                        <li>Scalable Architecture</li>
-                        <li>Secure Authentication</li>
-                        <li>High Performance API</li>
-                        <li>Responsive Design</li>
-                    </ul>
+            
+            <div class="flex flex-col md:flex-row h-full overflow-y-auto">
+                <!-- Left: Interactive Gallery -->
+                <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col gap-4 border-b md:border-b-0 md:border-r border-gray-200/20 dark:border-white/5 relative">
+                    <div class="relative flex-1 min-h-[250px] md:min-h-[350px] rounded-xl overflow-hidden bg-gray-100 dark:bg-neutral-900 flex items-center justify-center">
+                        <img id="modal-image" src="" alt="Project Image" class="w-full h-full object-cover hidden">
+                        <i id="modal-image-placeholder" class="fa-solid fa-laptop-code text-5xl text-gray-400/30"></i>
+                        
+                        <!-- Navigation -->
+                        <button id="prev-image" class="hidden absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 items-center justify-center hover:scale-105 transition-transform z-10 text-gray-800 dark:text-white shadow-sm">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <button id="next-image" class="hidden absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 items-center justify-center hover:scale-105 transition-transform z-10 text-gray-800 dark:text-white shadow-sm">
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </button>
+                        
+                        <!-- Indicators -->
+                        <div id="image-indicators" class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"></div>
+                    </div>
+                    <!-- Thumbnails -->
+                    <div id="thumbnail-gallery" class="grid grid-cols-4 gap-2.5 hidden"></div>
+                </div>
+                
+                <!-- Right: Content Specifications -->
+                <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col">
+                    <span id="modal-tag" class="px-2.5 py-1 rounded bg-gray-100 text-gray-600 dark:bg-neutral-900 dark:text-gray-400 text-[10px] font-bold uppercase tracking-wider w-max mb-3">TAG</span>
+                    <h2 id="modal-title" class="text-3xl md:text-4xl font-serif font-medium text-gray-900 dark:text-white mb-3">Project Title</h2>
+                    <p id="modal-desc" class="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed font-light">Description details.</p>
+                    
+                    <h3 class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Technologies</h3>
+                    <div id="modal-tech" class="flex flex-wrap gap-1.5 mb-6"></div>
+                    
+                    <div class="border-t border-gray-100 dark:border-neutral-900 pt-6 mb-6 flex-1">
+                        <h3 class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-3">Core Features</h3>
+                        <ul class="list-none space-y-2 text-gray-600 dark:text-gray-400 text-xs font-light" id="modal-features">
+                            <!-- Injected by script.js -->
+                        </ul>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-auto">
+                        <button id="live-demo-btn" class="flex-1 py-3 rounded-lg bg-accent text-white font-semibold text-sm hover:opacity-90 transition-opacity">Live Demo</button>
+                        <button id="github-btn" class="flex-1 py-3 rounded-lg border border-gray-300 dark:border-neutral-800 text-gray-900 dark:text-white font-semibold text-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-brands fa-github text-base"></i> Codebase
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main Container -->
-    <main id="scroll-container">
+    <main id="main-content" class="flex flex-col relative z-10 w-full">
         
-        <!-- SECTION 1: HOME -->
-        <section id="home" class="bg-saffron flex items-center justify-center relative group pt-20 md:pt-0">
-            <!-- Decorative Interactive Shapes -->
-            <div onclick="explode(event)" class="absolute top-20 left-10 md:left-20 w-20 h-20 md:w-32 md:h-32 bg-indigo rounded-full animate-[bounce_3s_infinite] cursor-pointer hover:scale-110 transition-transform border-4 border-black"></div>
-            <div onclick="explode(event)" class="absolute bottom-20 right-10 md:right-20 w-32 h-32 md:w-48 md:h-48 bg-marigold rotate-45 animate-[spin_10s_linear_infinite] cursor-pointer hover:scale-110 transition-transform border-4 border-black"></div>
-            
-            <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
-                <div class="gsap-reveal-home text-center md:text-left">
-                    <h1 class="text-3xl md:text-7xl font-display font-black text-white leading-[0.9] mb-6">
-                        FULL STACK<br>
-                        <span class="text-indigo">DEV</span>ELOPER
-                    </h1>
-                    <p class="text-lg md:text-xl font-sans font-medium text-indigo/80 max-w-md mx-auto md:mx-0 mb-8 bg-white/20 p-4 border-l-4 border-indigo backdrop-blur-none">
-                        Specializing in MERN stack, Java, and Spring Boot. Architecting scalable enterprise solutions.
-                    </p>
-                    <button onclick="scrollToSection(3)" class="px-8 py-4 bg-indigo text-white font-bold font-sans uppercase tracking-wider solid-shadow-white hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all border-2 border-indigo">
-                        See My Work
+        <!-- SECTION 1: HERO -->
+        <section id="home" class="min-h-screen flex items-center justify-center pt-24 pb-12">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <span class="text-[11px] uppercase tracking-widest text-accent font-bold block mb-4">Nikhil Pundir • Full Stack Engineer</span>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-light tracking-tight leading-[1.1] text-gray-900 dark:text-white mb-6">
+                    Architecting <span class="italic font-light">clean</span> and <span class="font-bold">sincere</span> digital systems.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed font-light mb-12">
+                    Transforming complex engineering processes into elegant, responsive, and performance-oriented products. Currently building full-stack applications in India.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="scrollToSection('work')" class="px-8 py-3.5 rounded-full bg-accent text-white hover:opacity-90 transition-opacity font-semibold text-sm shadow-sm">
+                        Selected Works
                     </button>
-                </div>
-                <!-- Hero Image -->
-                <div class="relative h-[300px] md:h-[500px] w-full gsap-reveal-home-img mt-8 md:mt-0">
-                    <div class="absolute inset-0 bg-rani border-4 border-black solid-shadow transform rotate-3 z-10"></div>
-                    <div class="absolute inset-0 w-full h-full border-4 border-black z-20 overflow-hidden">
-                        <img src="assets/images/mypic.png" alt="Nikhil Pundir" class="w-full h-full object-contain">
-                    </div>
+                    <button onclick="scrollToSection('contact')" class="px-8 py-3.5 rounded-full border border-gray-300 dark:border-neutral-800 text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all font-semibold text-sm">
+                        Get in Touch
+                    </button>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 2: ABOUT -->
-        <section id="about" class="bg-cream flex items-center relative pt-20 md:pt-0">
-            <div class="absolute left-0 h-full w-full md:w-1/3 bg-teal/10 hidden md:block skew-x-12 transform -translate-x-20"></div>
-            <div class="container mx-auto px-6 relative z-10">
-                <div class="flex flex-col md:flex-row gap-16 items-center">
-                    <div class="w-full md:w-1/2 relative gsap-reveal-about-left">
-                        <div class="relative z-10 p-6 md:p-10 bg-white border-4 border-black solid-shadow">
-                            <h2 class="text-2xl md:text-6xl font-display font-black text-black mb-6">WHO I AM</h2>
-                            <p class="text-base md:text-lg font-sans text-gray-800 mb-6 leading-relaxed font-medium">
-                                I am <span class="bg-marigold px-1">Nikhil Pundir</span>. A highly adaptable Full Stack Developer with over 1.5 years of experience. I master new frameworks rapidly and contribute directly to successful full-stack product deployment.
-                            </p>
-                            <div class="grid grid-cols-2 gap-4 mt-8">
-                                <div class="p-4 bg-teal text-white border-2 border-black text-center">
-                                    <span class="block text-3xl md:text-4xl font-display font-bold">1.5+</span>
-                                    <span class="text-xs uppercase tracking-widest">Years Exp</span>
-                                </div>
-                                <div class="p-4 bg-rani text-white border-2 border-black text-center">
-                                    <span class="block text-3xl md:text-4xl font-display font-bold">MCA</span>
-                                    <span class="text-xs uppercase tracking-widest">Qualified</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute top-4 -right-4 w-full h-full border-4 border-black z-0 bg-transparent"></div>
+        <section id="about" class="py-32 border-t border-gray-100 dark:border-neutral-900">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+                    <div class="md:col-span-5">
+                        <span class="text-[10px] uppercase tracking-widest text-accent font-bold block mb-2">Biography</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-medium text-gray-900 dark:text-white mb-6 leading-tight">Design to build, built to last.</h2>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-light text-sm mb-6">
+                            I am a Full Stack Engineer specialized in architecting reliable backend infrastructures and crafting clean, accessible user interfaces.
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed font-light text-sm">
+                            With solid experience in Java, Spring Boot, React, and Flutter, I focus on building high-performance systems and robust database schema alignments.
+                        </p>
                     </div>
-                    <div class="w-full md:w-1/2 gsap-reveal-about-right">
-                        <!-- Hidden "ABOUT" text on mobile to save space -->
-                        <h3 class="hidden md:block text-8xl font-display font-black text-transparent text-stroke outline-text opacity-20 absolute top-0 right-0 select-none">ABOUT</h3>
-                        <ul class="space-y-6 font-sans text-xl md:text-2xl font-bold text-black">
-                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-rani transition-colors shrink-0">1</span>
-                                <span>MERN Stack Expert</span>
-                            </li>
-                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-saffron transition-colors shrink-0">2</span>
-                                <span>Java & Spring Boot</span>
-                            </li>
-                            <li class="flex items-center gap-4 group cursor-pointer hover:translate-x-2 transition-transform">
-                                <span class="w-12 h-12 flex items-center justify-center bg-black text-white rounded-full group-hover:bg-teal transition-colors shrink-0">3</span>
-                                <span>Backend Architect</span>
-                            </li>
-                        </ul>
+                  <div class="md:col-span-7">
+            <!-- Profile Shell with animated CLI -->
+            <div id="profile-shell" class="hairline-card overflow-hidden flex flex-col font-mono text-[11px] h-64 border border-gray-200/20 dark:border-white/5" onclick="focusTerminal()">
+                <div class="flex items-center justify-between px-4 py-2.5 bg-gray-100/50 dark:bg-neutral-900/50 border-b border-gray-200/20 dark:border-white/5 select-none">
+                    <div class="flex gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-400 inline-block"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
                     </div>
+                    <div class="text-[9px] text-gray-500 font-semibold">nikhilpundir — profile.sh</div>
+                    <div class="w-8"></div>
+                </div>
+                <div id="terminal-body" class="p-5 flex-1 bg-transparent text-gray-700 dark:text-gray-300 overflow-y-auto leading-relaxed select-text cursor-text">
+                    <div id="terminal-history" class="whitespace-pre-wrap flex flex-col gap-1"></div>
+                    <div class="flex items-center gap-1.5 mt-2 border-t border-gray-200/10 dark:border-white/5 pt-2">
+                        <span class="text-accent font-bold">nikhil ~ $</span>
+                        <input type="text" id="terminal-input" class="bg-transparent border-none outline-none text-gray-700 dark:text-gray-300 flex-1 font-mono text-[11px] caret-transparent focus:outline-none" autocomplete="off" spellcheck="false">
+                        <span id="terminal-cursor" class="w-1.5 h-3 bg-gray-700 dark:bg-gray-300 animate-pulse"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Additional meaningful content -->
+            <div class="mt-6 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                <p>I specialize in building clean, modular full‑stack applications that scale gracefully. Over the past two years I've crafted micro‑services in Java/Spring Boot, responsive front‑ends with React, and cross‑platform mobile experiences using Flutter.</p>
+                <p class="mt-3">When I’m not coding, I enjoy exploring UI/UX trends, contributing to open‑source projects, and sharing knowledge through technical talks and blog posts.</p>
+            </div>
+        </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: SKILLS -->
-        <section id="skills" class="bg-rani flex flex-col justify-center relative overflow-hidden pt-20 md:pt-0">
-            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 2px, transparent 2px); background-size: 30px 30px;"></div>
-            <div class="container mx-auto px-6 relative z-10">
-                <h2 class="text-3xl md:text-9xl font-display font-black text-white mb-12 text-center mix-blend-overlay opacity-50 md:absolute md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:w-full pointer-events-none">
-                    TOOLKIT
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill">
-                        <div class="w-16 h-16 bg-saffron border-2 border-black mb-6 flex items-center justify-center text-3xl">
+        <!-- SECTION 3: TOOLKIT -->
+        <section id="skills" class="py-32 border-t border-gray-100 dark:border-neutral-900">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <div class="mb-16">
+                    <span class="text-[10px] uppercase tracking-widest text-accent font-bold block mb-2">Capabilities</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-medium text-gray-900 dark:text-white">Technical Stack</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Backend -->
+                    <div class="hairline-card flex flex-col">
+                        <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-neutral-900/50 text-gray-700 dark:text-gray-300 flex items-center justify-center text-base mb-6">
                             <i class="fa-solid fa-server"></i>
                         </div>
-                        <h3 class="text-2xl font-display font-bold mb-4">Backend</h3>
-                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
-                            <span class="bg-gray-200 px-2 py-1">Java</span>
-                            <span class="bg-gray-200 px-2 py-1">Spring Boot</span>
-                            <span class="bg-gray-200 px-2 py-1">Node.js</span>
-                            <span class="bg-gray-200 px-2 py-1">PostgreSQL</span>
-                            <span class="bg-gray-200 px-2 py-1">MongoDB</span>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Backend System</h3>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Java</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Spring Boot</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Node.js</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Express</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">PostgreSQL</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">MongoDB</span>
                         </div>
                     </div>
-                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill delay-100">
-                        <div class="w-16 h-16 bg-teal border-2 border-black mb-6 flex items-center justify-center text-3xl">
+                    <!-- Frontend -->
+                    <div class="hairline-card flex flex-col">
+                        <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-neutral-900/50 text-gray-700 dark:text-gray-300 flex items-center justify-center text-base mb-6">
                             <i class="fa-brands fa-react"></i>
                         </div>
-                        <h3 class="text-2xl font-display font-bold mb-4">Frontend</h3>
-                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
-                            <span class="bg-gray-200 px-2 py-1">React.js</span>
-                            <span class="bg-gray-200 px-2 py-1">Next.js</span>
-                            <span class="bg-gray-200 px-2 py-1">Electron.js</span>
-                            <span class="bg-gray-200 px-2 py-1">Tailwind</span>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Frontend Layer</h3>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">React.js</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Next.js</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Tailwind CSS</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">JavaScript</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">HTML5 / CSS3</span>
                         </div>
                     </div>
-                    <div class="bg-white p-8 border-4 border-black solid-shadow hover:-translate-y-2 transition-transform duration-300 gsap-reveal-skill delay-200">
-                        <div class="w-16 h-16 bg-indigo text-white border-2 border-black mb-6 flex items-center justify-center text-3xl">
+                    <!-- Mobile & Tools -->
+                    <div class="hairline-card flex flex-col">
+                        <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-neutral-900/50 text-gray-700 dark:text-gray-300 flex items-center justify-center text-base mb-6">
                             <i class="fa-solid fa-wrench"></i>
                         </div>
-                        <h3 class="text-2xl font-display font-bold mb-4">Tools & Mobile</h3>
-                        <div class="flex flex-wrap gap-2 font-sans font-bold text-sm">
-                            <span class="bg-gray-200 px-2 py-1">Flutter</span>
-                            <span class="bg-gray-200 px-2 py-1">Git/GitHub</span>
-                            <span class="bg-gray-200 px-2 py-1">Postman</span>
-                            <span class="bg-gray-200 px-2 py-1">SPI</span>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Tools & Mobile</h3>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Flutter</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Electron</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Docker</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">Git & GitHub</span>
+                            <span class="px-2.5 py-1 rounded bg-gray-100 dark:bg-neutral-900 text-[10px] font-semibold text-gray-600 dark:text-gray-400">CI/CD</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: EXPERIENCE/WORK -->
-        <section id="work" class="bg-teal flex flex-col relative pt-20 md:pt-0 pb-20 md:pb-0">
-            <div class="container mx-auto px-6 flex flex-col h-full justify-center">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10 border-b-4 border-black pb-4 flex-shrink-0">
-                    <h2 class="text-3xl md:text-7xl font-display font-black text-white text-stroke-black">EXPERIENCE</h2>
-                    <span class="font-sans font-bold text-white text-xl mt-2 md:mt-0">Recent Projects</span>
+        <!-- SECTION 4: SELECTED WORKS -->
+        <section id="work" class="py-32 border-t border-gray-100 dark:border-neutral-900">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <div class="mb-16">
+                    <span class="text-[10px] uppercase tracking-widest text-accent font-bold block mb-2">Portfolio</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-medium text-gray-900 dark:text-white">Selected Works</h2>
                 </div>
-                
-                <!-- Projects Container: Scrollable on both Mobile and Desktop -->
-                <div class="flex-1 overflow-y-auto overflow-x-hidden pb-4 projects-scroll">
-                    <div class="flex flex-col md:grid md:grid-cols-3 gap-8 pb-8">
-                    
-                    <!-- Project 1 -->
-                    <div onclick="openProject('Brand Portal & App', 'Developed a scalable, full-stack brand portal and mobile app for influencer marketing. Features campaign management and profile discovery.', 'Spring Boot, Next.js, PostgreSQL, Flutter', 'assets/images/echio_brand.png', 'Echiofy')" 
-                         class="w-full group relative cursor-pointer gsap-reveal-project">
-                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
-                             <div class="text-white text-center p-6">
-                                <h3 class="text-3xl font-display font-bold mb-2">Influencer Portal</h3>
-                                <p class="font-sans text-sm opacity-80">Spring Boot + Next.js</p>
-                            </div>
-                            <div class="absolute inset-0 bg-indigo/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
-                                <h3 class="text-3xl font-display font-bold text-white mb-2">Brand Portal</h3>
-                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 -->
-                    <div onclick="openProject('Restaurant POS', 'Engineered a comprehensive Restaurant POS system integrating cash and SPI payments for streamlined operations.', 'MERN Stack, SPI Payments', 'assets/images/kodeklan_greenfarm_pos.jpeg', 'Kode Klan')" 
-                         class="w-full group relative cursor-pointer gsap-reveal-project">
-                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
-                             <div class="text-white text-center p-6">
-                                <h3 class="text-3xl font-display font-bold mb-2">Restaurant POS</h3>
-                                <p class="font-sans text-sm opacity-80">MERN Stack</p>
-                            </div>
-                            <div class="absolute inset-0 bg-rani/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
-                                <h3 class="text-3xl font-display font-bold text-white mb-2">Restaurant POS</h3>
-                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 3 -->
-                    <div onclick="openProject('Driver App', 'Secure, real-time Driver Desktop Application using Electron.js and WebSockets for dynamic POS communication and thermal printing.', 'Electron.js, WebSockets, Node.js', '', 'Kode Klan')" 
-                         class="w-full group relative cursor-pointer gsap-reveal-project">
-                        <div class="h-[350px] md:h-[400px] bg-gray-900 border-4 border-black solid-shadow-white relative overflow-hidden flex items-center justify-center">
-                             <div class="text-white text-center p-6">
-                                <h3 class="text-3xl font-display font-bold mb-2">Driver Desktop App</h3>
-                                <p class="font-sans text-sm opacity-80">Electron.js + WebSockets</p>
-                            </div>
-                            <div class="absolute inset-0 bg-saffron/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col">
-                                <h3 class="text-3xl font-display font-bold text-white mb-2">Driver App</h3>
-                                <button class="px-6 py-2 bg-white text-black font-bold uppercase border-2 border-black solid-shadow">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    </div>
+                <!-- Projects List Row Showcase -->
+                <div id="projects-list" class="flex flex-col border-t border-gray-200/20 dark:border-white/5">
+                    <!-- Injected by script.js -->
                 </div>
             </div>
         </section>
 
         <!-- SECTION 5: CONTACT -->
-        <section id="contact" class="bg-indigo flex items-center relative pt-20 md:pt-0">
-            <div class="container mx-auto px-6 flex flex-col md:flex-row gap-12 items-center justify-center h-full">
-                <div class="w-full md:w-1/2 text-white text-center md:text-left gsap-reveal-contact">
-                    <h2 class="text-4xl md:text-9xl font-display font-black mb-6 leading-none">SAY<br><span class="text-marigold">HELLO.</span></h2>
-                    <p class="text-lg md:text-xl font-sans mb-8 max-w-lg mx-auto md:mx-0">Ready to architect scalable full-stack solutions? Let's connect.</p>
-                    <a href="mailto:nikhilp190902@gmail.com" class="inline-block text-xl md:text-5xl font-display font-bold hover:text-saffron transition-colors border-b-4 border-white hover:border-saffron pb-2 break-all md:break-normal">
-                        nikhilp190902@gmail.com
-                    </a>
-                    <div class="mt-12 flex gap-6 justify-center md:justify-start">
-                        <a href="https://github.com/nikhilpundir" target="_blank" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center text-2xl border-4 border-transparent hover:border-marigold hover:scale-110 transition-all" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://linkedin.com/in/nikhil-pundir" target="_blank" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center text-2xl border-4 border-transparent hover:border-rani hover:scale-110 transition-all" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="https://leetcode.com/u/pundirnikhil" target="_blank" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center border-4 border-transparent hover:border-saffron hover:scale-110 transition-all" aria-label="LeetCode">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
-                                <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/>
-                            </svg>
-                        </a>
-                    </div>
+        <section id="contact" class="py-32 border-t border-gray-100 dark:border-neutral-900 text-center">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <span class="text-[10px] uppercase tracking-widest text-accent font-bold block mb-4">Connection</span>
+                <h2 class="text-4xl md:text-7xl font-serif font-light tracking-tight text-gray-900 dark:text-white mb-8 leading-tight">
+                    Let's make something <span class="italic font-bold">sincere.</span>
+                </h2>
+                <p class="text-base text-gray-600 dark:text-gray-400 max-w-lg mx-auto leading-relaxed font-light mb-12">
+                    Whether it's an API architecture, a mobile cross-platform layout, or a frontend challenge, I'm always open to discussing solutions.
+                </p>
+                
+                <a href="mailto:nikhilp190902@gmail.com" class="inline-block text-2xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white hover:text-accent border-b border-gray-400 dark:border-neutral-700 hover:border-accent pb-1.5 transition-colors mb-16">
+                    nikhilp190902@gmail.com
+                </a>
+                
+                <div class="flex gap-8 justify-center">
+                    <a href="https://github.com/nikhilpundir" target="_blank" class="text-xs uppercase tracking-wider text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors font-bold">GitHub</a>
+                    <a href="https://linkedin.com/in/nikhil-pundir" target="_blank" class="text-xs uppercase tracking-wider text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors font-bold">LinkedIn</a>
+                    <a href="https://leetcode.com/u/pundirnikhil" target="_blank" class="text-xs uppercase tracking-wider text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors font-bold">LeetCode</a>
                 </div>
             </div>
-            <div class="absolute bottom-0 w-full bg-black text-white p-4 text-center font-sans font-bold uppercase tracking-widest text-xs">
-                © 2025 Nikhil Pundir • New Delhi, India
+            <div class="mt-24 text-[10px] text-gray-400 dark:text-gray-600 uppercase tracking-widest font-semibold">
+                © 2026 Nikhil Pundir • Crafted with Sincerity
             </div>
         </section>
     </main>
 
-    <!-- External JavaScript -->
+    <!-- JavaScript Bundle -->
     <script src="script.js"></script>
 </body>
 </html>
