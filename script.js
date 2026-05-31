@@ -1,22 +1,22 @@
 // --- ACCESSIBILITY & REDUCED MOTION ---
 const htmlEl = document.documentElement;
-const motionToggleBtn = document.getElementById('motion-toggle');
-let reducedMotionEnabled = localStorage.getItem('reducedMotion') === 'true';
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+let reducedMotionEnabled = motionQuery.matches;
 
 function updateMotionState() {
-    const icon = motionToggleBtn.querySelector('i');
+    const heroVideo = document.getElementById('hero-video');
     if (reducedMotionEnabled) {
-        icon.className = 'fa-solid fa-eye-slash text-xs text-red-500/80';
         htmlEl.classList.add('reduced-motion');
+        if (heroVideo) heroVideo.pause();
     } else {
-        icon.className = 'fa-solid fa-eye text-xs text-gray-400 dark:text-neutral-500';
         htmlEl.classList.remove('reduced-motion');
+        if (heroVideo) heroVideo.play().catch(err => console.log('Autoplay initialized:', err));
     }
 }
 
-motionToggleBtn.addEventListener('click', () => {
-    reducedMotionEnabled = !reducedMotionEnabled;
-    localStorage.setItem('reducedMotion', reducedMotionEnabled ? 'true' : 'false');
+// Watch for changes in OS settings
+motionQuery.addEventListener('change', (e) => {
+    reducedMotionEnabled = e.matches;
     updateMotionState();
 });
 
@@ -113,6 +113,7 @@ function scrollToSection(id) {
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
 let particles = [];
+let ripples = [];
 let dotColor = 'rgba(28, 28, 30, 0.08)';
 
 let mouse = { x: null, y: null };
@@ -177,12 +178,52 @@ class DustParticle {
     }
 }
 
+class Ripple {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 0;
+        this.maxRadius = 160;
+        this.speed = 2.8;
+        this.opacity = 0.5;
+    }
+
+    update() {
+        this.radius += this.speed;
+        this.opacity = 0.5 * (1 - this.radius / this.maxRadius);
+    }
+
+    draw() {
+        ctx.strokeStyle = htmlEl.classList.contains('dark') 
+            ? `rgba(59, 130, 246, ${this.opacity})` 
+            : `rgba(37, 99, 235, ${this.opacity})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+}
+
+// Global click handler to spawn ripples
+window.addEventListener('click', (e) => {
+    if (reducedMotionEnabled || !canvas) return;
+    
+    // Ignore interactive tags
+    const interactiveTags = ['BUTTON', 'A', 'INPUT', 'TEXTAREA'];
+    if (interactiveTags.includes(e.target.tagName) || e.target.closest('#profile-shell') || e.target.closest('nav')) {
+        return;
+    }
+    
+    ripples.push(new Ripple(e.clientX, e.clientY));
+});
+
 function initCanvas() {
     if (!canvas || !ctx) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
     particles = [];
+    ripples = [];
     const count = Math.min(Math.floor((canvas.width * canvas.height) / 12000), 120);
     for (let i = 0; i < count; i++) {
         particles.push(new DustParticle());
@@ -201,9 +242,20 @@ function animateCanvas() {
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // Dust Particles
     for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
+    }
+
+    // Ripples
+    for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        if (ripples[i].radius >= ripples[i].maxRadius) {
+            ripples.splice(i, 1);
+        } else {
+            ripples[i].draw();
+        }
     }
     
     requestAnimationFrame(animateCanvas);
@@ -285,7 +337,7 @@ function renderProjectsList() {
     container.innerHTML = '';
     
     projectsData.forEach((project) => {
-        const row = document.createElement('div');
+        const row = document.createElement('article');
         row.className = 'project-row group';
         row.onclick = () => openProjectById(project.id);
         
@@ -498,6 +550,8 @@ function goToImage(index) {
 const terminalInput = document.getElementById('terminal-input');
 const terminalHistory = document.getElementById('terminal-history');
 const terminalBody = document.getElementById('terminal-body');
+const profileShell = document.getElementById('profile-shell');
+const terminalBackdrop = document.getElementById('terminal-backdrop');
 
 function focusTerminal() {
     if (terminalInput) {
@@ -505,12 +559,96 @@ function focusTerminal() {
     }
 }
 
+function handleTerminalClick(e) {
+    const btnIds = ['terminal-btn-red', 'terminal-btn-yellow', 'terminal-btn-green'];
+    if (btnIds.includes(e.target.id)) {
+        return;
+    }
+    focusTerminal();
+}
+
+function toggleTerminalExpand() {
+    if (!profileShell) return;
+    const isExpanded = profileShell.classList.contains('is-expanded');
+    
+    if (isExpanded) {
+        profileShell.classList.remove('is-expanded');
+        if (terminalBackdrop) terminalBackdrop.classList.remove('show');
+        document.body.style.overflow = '';
+    } else {
+        profileShell.classList.remove('is-minimized');
+        profileShell.classList.add('is-expanded');
+        if (terminalBackdrop) terminalBackdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        focusTerminal();
+    }
+}
+
+// Window control button actions
+window.handleTerminalBtn = function(action, e) {
+    if (e) e.stopPropagation();
+    
+    if (action === 'red') {
+        // Red: Close expanded state, or clear history
+        if (profileShell && profileShell.classList.contains('is-expanded')) {
+            toggleTerminalExpand(); 
+        } else if (terminalHistory) {
+            terminalHistory.innerHTML = '';
+            const line = document.createElement('div');
+            line.innerHTML = `Welcome to profile shell. Type "help" to start.`;
+            terminalHistory.appendChild(line);
+        }
+    } else if (action === 'yellow') {
+        // Yellow: Minimize/Collapse
+        if (profileShell) {
+            if (profileShell.classList.contains('is-expanded')) {
+                toggleTerminalExpand(); // revert to normal before minimizing
+            }
+            profileShell.classList.toggle('is-minimized');
+            if (profileShell.classList.contains('is-minimized') && terminalInput) {
+                terminalInput.blur();
+            }
+        }
+    } else if (action === 'green') {
+        // Green: Maximize/Expand
+        if (profileShell) {
+            if (profileShell.classList.contains('is-minimized')) {
+                profileShell.classList.remove('is-minimized');
+            }
+            toggleTerminalExpand();
+        }
+    }
+};
+
+if (terminalBackdrop) {
+    terminalBackdrop.addEventListener('click', () => {
+        if (profileShell && profileShell.classList.contains('is-expanded')) {
+            toggleTerminalExpand();
+        }
+    });
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (profileShell && profileShell.classList.contains('is-expanded')) {
+            toggleTerminalExpand();
+        }
+    }
+});
+
 if (terminalInput) {
     terminalInput.addEventListener('blur', () => {
         document.getElementById('terminal-cursor').classList.add('opacity-40');
+        if (profileShell) {
+            profileShell.classList.remove('is-focused');
+        }
     });
     terminalInput.addEventListener('focus', () => {
         document.getElementById('terminal-cursor').classList.remove('opacity-40');
+        if (profileShell) {
+            profileShell.classList.remove('is-minimized'); // auto restore height when focused
+            profileShell.classList.add('is-focused');
+        }
     });
 }
 
@@ -520,6 +658,7 @@ const commands = {
   skills     - Expanded tech stacks
   works      - List featured works
   contact    - Connect channels & links
+  exit       - Close or minimize shell
   clear      - Reset terminal outputs`,
     
     about: () => `I am Nikhil Pundir. MCA-qualified Full Stack Developer with 1.5+ years of engineering experience. I design clean microservices in Java/Spring Boot and minimal frontends in React & Next.js.`,
@@ -541,6 +680,8 @@ const commands = {
   - Email:    nikhilp190902@gmail.com
   - LinkedIn: linkedin.com/in/nikhil-pundir
   - GitHub:   github.com/nikhilpundir`,
+
+    exit: () => `Exiting profile session...`
 };
 
 function appendToTerminalHistory(cmd, output) {
@@ -571,7 +712,14 @@ async function runBootSequence() {
     terminalHistory.appendChild(line);
 }
 
+const terminalInputDisplay = document.getElementById('terminal-input-display');
 if (terminalInput) {
+    terminalInput.addEventListener('input', (e) => {
+        if (terminalInputDisplay) {
+            terminalInputDisplay.textContent = e.target.value;
+        }
+    });
+
     terminalInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const inputVal = terminalInput.value.trim();
@@ -582,6 +730,16 @@ if (terminalInput) {
             
             if (lowerInput === 'clear') {
                 terminalHistory.innerHTML = '';
+            } else if (lowerInput === 'exit') {
+                outputText = commands.exit();
+                appendToTerminalHistory(inputVal, outputText);
+                setTimeout(() => {
+                    if (profileShell && profileShell.classList.contains('is-expanded')) {
+                        toggleTerminalExpand();
+                    } else if (profileShell) {
+                        profileShell.classList.add('is-minimized');
+                    }
+                }, 500);
             } else if (commands[lowerInput]) {
                 outputText = commands[lowerInput]();
                 appendToTerminalHistory(inputVal, outputText);
@@ -591,6 +749,9 @@ if (terminalInput) {
             }
             
             terminalInput.value = '';
+            if (terminalInputDisplay) {
+                terminalInputDisplay.textContent = '';
+            }
         }
     });
 }
@@ -617,11 +778,76 @@ function initGSAP() {
             }
         );
     });
+
+    // Custom profile shell scroll entry
+    const pShell = document.getElementById('profile-shell');
+    if (pShell) {
+        // Removed perspective/rotationX to prevent position:fixed containment bugs
+        gsap.fromTo(pShell,
+            { scale: 0.95, opacity: 0, y: 40 },
+            {
+                scale: 1, opacity: 1, y: 0,
+                duration: 1.2,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: pShell,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+    }
+
+    // Custom background video parallax scroll (GPU accelerated & effortless)
+    const hVideo = document.getElementById('hero-video');
+    if (hVideo) {
+        gsap.to(hVideo, {
+            yPercent: 20, // Gentle parallax drift
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#home",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+    }
+}
+
+// --- HERO VIDEO OBSERVERS & CONTROLS ---
+function initHeroVideo() {
+    const heroVideo = document.getElementById('hero-video');
+    if (!heroVideo) return;
+
+    if (!reducedMotionEnabled) {
+        heroVideo.play().catch(err => console.log('Autoplay initialized:', err));
+    }
 }
 
 // Init on load
 document.addEventListener('DOMContentLoaded', () => {
     loadProjects();
+    initHeroVideo();
     setTimeout(runBootSequence, 300);
     setTimeout(initGSAP, 600);
 });
+
+// --- GLOBAL LOADER ---
+window.addEventListener('load', () => {
+    const loader = document.getElementById('global-loader');
+    if (loader) {
+        // Short minimum delay to ensure smooth entry
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none';
+            document.body.classList.remove('overflow-hidden');
+            
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 700);
+        }, 500);
+    } else {
+        document.body.classList.remove('overflow-hidden');
+    }
+});
+
